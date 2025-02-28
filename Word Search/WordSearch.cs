@@ -35,23 +35,37 @@ namespace Word_Search
              "....................",
              "....................",
              "....................",
-
             };
-
-            string[] allCategories = {"Anakin", "Luke", "QuiGon", "Revan", "JocastaNu", "BastilleShan", "Jolee", "Ahsoka",
-                "GalenMarek", "ObiWan", "PloKoon", "KitFisto", "BarrissOffee", "CalKestis" };
-            string[] allWords = new string[15];
-            Random rnd = new Random();
-            for (int i = 0; i < allWords.Length; i++)
+            string filePath = "Words.txt";
+            string[] allLines = File.ReadAllLines(filePath);
+            string[] allCategories = new string[10];
+            int numberOfCategores = 10;
+            int numberOfWords = 15;
+            for (int i = 0; i < numberOfCategores; i++)
             {
-                int randomIndex = rnd.Next(0, allWords.Length);
-                string potentialWord = allWords[randomIndex++];
-                if (allWords.Contains(potentialWord))
+                allCategories[i] = allLines[i * (numberOfWords + 1)];
+            }
+            string[] allWords = new string[numberOfWords];
+            Random rnd = new Random();
+            string[] selectedWords = new string[8];
+            for(int i = 0; i < selectedWords.Length; i++)
+            {
+                int randomIndex;
+                string potentialWord;
+                do
                 {
-                    i--;
-                    continue;
+                    randomIndex = rnd.Next(0, numberOfWords);
+                    potentialWord = allWords[randomIndex];
                 }
-                allWords[i] = potentialWord;
+                while (selectedWords.Contains(potentialWord));
+                {
+                    selectedWords[i] = potentialWord;
+                }
+                Console.WriteLine("Randomly chosen words: ");
+                foreach(var word in selectedWords)
+                {
+                    Console.WriteLine(word);
+                }
             }
         }
         static string[] GenerateBoard()
@@ -72,18 +86,21 @@ namespace Word_Search
         }
         static string[] ReadCategories()
         {
-            int numberOfWords = 15;
             string filePath = "Words.txt";
+            int numberOfCategories = 10;
+            int numberOfWords = 15;
             string[] allCategoriesAndWords = File.ReadAllLines(filePath);
-            string[][] categoriesAndWords = new string[10][];
-            for (int i = 0; i < categoriesAndWords.Length; i++)
-            {
-                categoriesAndWords[i] = new string[numberOfWords];
-                for (int j = 0; j < categoriesAndWords.Length; j++)
+            string[] categoryNames = new string[numberOfCategories];
+                for (int i = 0; i < numberOfWords + 1; i++)
                 {
-                    categoriesAndWords[i][j] = allCategoriesAndWords[i * numberOfWords + j];
+                    int index = i * (numberOfWords + 1);
+                    if(index < allCategoriesAndWords.Length)
+                    {
+                    categoryNames[i] = allCategoriesAndWords[index];
+                    }
                 }
-            }
+                return categoryNames;
+            
         }
         static string DisplayCategories()
         {
@@ -112,7 +129,7 @@ namespace Word_Search
                 }
                 else
                 {
-                    Console.WriteLine("\nInvalid input? Try agasin.");
+                    Console.WriteLine("\nInvalid input? Try again.");
                 }
 
             }
