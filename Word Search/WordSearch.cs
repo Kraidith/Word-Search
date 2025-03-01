@@ -6,13 +6,18 @@ namespace Word_Search
     {
         static void Main(string[] args)
         {
+            Words.GenerateWordsFile();
             GenerateBoard();
             ReadCategories();
             DisplayCategories();
             string[] board = GenerateBoard();
             string selectedCategories = DisplayCategories();
             Console.WriteLine("You chose: " + selectedCategories);
-            // user input is a Console.ReadLine()
+            if(DisplayCategories().Length == 0)
+            {
+                Console.WriteLine("No categoris found.");
+                return;
+            }
             string[] WordSearchBoard =
             {
              "....................",
@@ -41,10 +46,6 @@ namespace Word_Search
             string[] allCategories = new string[10];
             int numberOfCategores = 10;
             int numberOfWords = 15;
-            for (int i = 0; i < numberOfCategores; i++)
-            {
-                allCategories[i] = allLines[i * (numberOfWords + 1)];
-            }
             string[] allWords = new string[numberOfWords];
             Random rnd = new Random();
             string[] selectedWords = new string[8];
@@ -58,9 +59,7 @@ namespace Word_Search
                     potentialWord = allWords[randomIndex];
                 }
                 while (selectedWords.Contains(potentialWord));
-                {
-                    selectedWords[i] = potentialWord;
-                }
+                selectedWords[i] = potentialWord;
                 Console.WriteLine("Randomly chosen words: ");
                 foreach(var word in selectedWords)
                 {
@@ -87,19 +86,18 @@ namespace Word_Search
         static string[] ReadCategories()
         {
             string filePath = "Words.txt";
-            int numberOfCategories = 10;
-            int numberOfWords = 15;
+            int numberOfCategories = 9;
             string[] allCategoriesAndWords = File.ReadAllLines(filePath);
-            string[] categoryNames = new string[numberOfCategories];
-                for (int i = 0; i < numberOfWords + 1; i++)
+            string[] categories = new string[numberOfCategories];
+                for (int i = 0; i < numberOfCategories + 1; i++)
                 {
-                    int index = i * (numberOfWords + 1);
+                    int index = i * (15 + 1);
                     if(index < allCategoriesAndWords.Length)
                     {
-                    categoryNames[i] = allCategoriesAndWords[index];
+                    categories[i] = allCategoriesAndWords[index];
                     }
                 }
-                return categoryNames;
+                return categories;
             
         }
         static string DisplayCategories()
@@ -111,17 +109,11 @@ namespace Word_Search
                 Console.WriteLine("No categories found");
                 return "";
             }
-            foreach (string category in categories)
-            {
-                Console.WriteLine("" + category);
-            }
-
             string input;
             while (true)
             {
                 Console.WriteLine("\n enter a category: ");
                 input = Console.ReadLine();
-
                 if (categories.Contains(input))
                 {
                     Console.WriteLine("\nValid input");
