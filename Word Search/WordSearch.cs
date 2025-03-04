@@ -9,15 +9,24 @@ namespace Word_Search
             Words.GenerateWordsFile();
             GenerateBoard();
             ReadCategories();
-            DisplayCategories();
+            SelectRandomWord();
+            string selectedCategory = DisplayCategories();
+            if(string.IsNullOrEmpty(selectedCategory))
+            {
+             Console.WriteLine("No categories found.");
+                return;
+            }
+            Console.WriteLine("You chose:" + selectedCategory);
+            List<string> wordsInCategory = GetWordsFromCategory(selectedCategory);
+            List<string> selectedWords = GetWordsFromCategory(selectedCategory);
+            Console.WriteLine("\n Randomly chosen words: ");
+            foreach(string word in selectedWords)
+            {
+                Console.WriteLine(word);
+            }
             string[] board = GenerateBoard();
             string selectedCategories = DisplayCategories();
             Console.WriteLine("You chose: " + selectedCategories);
-            if(DisplayCategories().Length == 0)
-            {
-                Console.WriteLine("No categoris found.");
-                return;
-            }
             string[] WordSearchBoard =
             {
              "....................",
@@ -41,31 +50,6 @@ namespace Word_Search
              "....................",
              "....................",
             };
-            string filePath = "Words.txt";
-            string[] allLines = File.ReadAllLines(filePath);
-            string[] allCategories = new string[10];
-            int numberOfCategores = 10;
-            int numberOfWords = 15;
-            string[] allWords = new string[numberOfWords];
-            Random rnd = new Random();
-            string[] selectedWords = new string[8];
-            for(int i = 0; i < selectedWords.Length; i++)
-            {
-                int randomIndex;
-                string potentialWord;
-                do
-                {
-                    randomIndex = rnd.Next(0, numberOfWords);
-                    potentialWord = allWords[randomIndex];
-                }
-                while (selectedWords.Contains(potentialWord));
-                selectedWords[i] = potentialWord;
-                Console.WriteLine("Randomly chosen words: ");
-                foreach(var word in selectedWords)
-                {
-                    Console.WriteLine(word);
-                }
-            }
         }
         static string[] GenerateBoard()
         {
@@ -86,28 +70,24 @@ namespace Word_Search
         static string[] ReadCategories()
         {
             string filePath = "Words.txt";
-            int numberOfCategories = 9;
-            string[] allCategoriesAndWords = File.ReadAllLines(filePath);
-            string[] categories = new string[numberOfCategories];
-                for (int i = 0; i < numberOfCategories + 1; i++)
+            string[] allLines = File.ReadAllLines(filePath);
+            List<string> categories = new List<string>();
+            foreach (string line in allLines)
+            {
+                if (!string.IsNullOrWhiteSpace(line))
                 {
-                    int index = i * (15 + 1);
-                    if(index < allCategoriesAndWords.Length)
-                    {
-                    categories[i] = allCategoriesAndWords[index];
-                    }
+                    categories.Add(line.Trim());
                 }
-                return categories;
-            
+            }
+            return categories;
         }
         static string DisplayCategories()
         {
-            string[] categories = ReadCategories();
-
-            if (categories.Length == 0)
+            List<string> categories = ReadCategories();
+            Console.WriteLine("\n Available categories");
+            foreach (string category in categories)
             {
-                Console.WriteLine("No categories found");
-                return "";
+                Console.WriteLine(category);
             }
             string input;
             while (true)
@@ -119,13 +99,50 @@ namespace Word_Search
                     Console.WriteLine("\nValid input");
                     return input;
                 }
-                else
-                {
-                    Console.WriteLine("\nInvalid input? Try again.");
-                }
-
+                Console.WriteLine("\nInvalid input! Try again.");
             }
-
+        }
+        static List<string> GetWordsFromCategory(string chosenCategory)
+        {
+            string filePath = "Words.txt";
+            string[] allLines = File.ReadAllLines(filePath);
+            List<string> words = new List<string>();
+            bool categoryFound = false;
+            foreach (string line in allLines)
+            {
+                if (string.IsNullOrEmpty(line))
+                {
+                 continue;
+                }
+                if (!categoryFound)
+                {
+                    if (line.Trim() == chosenCategory)
+                    {
+                     categoryFound = true;
+                        break;
+                    }
+                    else if(line.Trim() == chosenCategory)
+                    {
+                        categoryFound = true;
+                    }
+                }
+            }
+            return words;
+        }
+        static List<string> SelectRandomWord(List<string> words)
+        {
+            Random rnd = new Random();
+            List<string> selectedWords = new List<string>();
+            int wordCount = rnd.Next(8, Math.Min(15, words.Count));
+            while(selectedWords.Count < wordCount)
+            {
+                string potentialWord = words[rnd.Next(words.Count)];
+                if(!selectedWords.Contains(potentialWord))
+                {
+                    selectedWords.Add(potentialWord);
+                }
+            }
+            return selectedWords;
         }
     }
 }
