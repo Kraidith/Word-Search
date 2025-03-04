@@ -8,18 +8,6 @@ namespace Word_Search
         {
             string linesFilePath = "Words.txt";
             StreamWriter writer = new StreamWriter(linesFilePath);
-            string[] linesString =
-            {
-                "Jedi",
-                "Sith",
-                "Ranged",
-                "Melee",
-                "Carnivores",
-                "Herbivores",
-                "Planets",
-                "Races",
-                "Killers",
-            };
             string[,] categoriesAndWords =
             {
              { "Jedi", "Anakin", "Luke", "QuiGon", "Revan", "JocastaNu", "BastilleShan", "Jolee", "Ahsoka", "GalenMarek", "ObiWan", "PloKoon", "KitFisto", "BarrissOffee", "CalKestis"},
@@ -31,7 +19,6 @@ namespace Word_Search
              { "Planets", "Tatooine", "Korribane", "Coruscant", "Kamino", "Kashyyyk", "MalacorFive", "Utapau", "Ilum", "Felucia", "Rishi", "Zeffo", "Vardos", "Batuu", "Eriadu"},
              { "Races", "Human", "Greenskin", "Norsca", "VampireCounts", "VampireCoast", "High elf", "Wood elf", "Slanesh", "Khorne", "Tzeentch", "Nurgle", "Beastman", "DarkElves", "Dwarfs"},
              { "Killers", "Wraith", "Doctor", "Huntress", "Clown", "Legion", "Plague", "Trickster", "Mastermind", "DeathSlinger", "Shape", "Blight", "DarkLord", "Unknown", "Knight"},
-
             };
             for (int i = 0; i < categoriesAndWords.GetLength(0); i++)
             {

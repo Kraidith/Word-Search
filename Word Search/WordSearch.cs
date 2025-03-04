@@ -9,24 +9,25 @@ namespace Word_Search
             Words.GenerateWordsFile();
             GenerateBoard();
             ReadCategories();
-            SelectRandomWord();
             string selectedCategory = DisplayCategories();
-            if(string.IsNullOrEmpty(selectedCategory))
+            if (string.IsNullOrEmpty(selectedCategory))
             {
-             Console.WriteLine("No categories found.");
+                Console.WriteLine("No categories found.");
                 return;
             }
             Console.WriteLine("You chose:" + selectedCategory);
             List<string> wordsInCategory = GetWordsFromCategory(selectedCategory);
-            List<string> selectedWords = GetWordsFromCategory(selectedCategory);
+            List<string> selectedWords = SelectRandomWord(wordsInCategory);
             Console.WriteLine("\n Randomly chosen words: ");
-            foreach(string word in selectedWords)
+            foreach (string word in selectedWords)
             {
                 Console.WriteLine(word);
             }
             string[] board = GenerateBoard();
-            string selectedCategories = DisplayCategories();
-            Console.WriteLine("You chose: " + selectedCategories);
+            foreach(string row in board)
+            {
+                Console.WriteLine(row);
+            }
             string[] WordSearchBoard =
             {
              "....................",
@@ -51,7 +52,7 @@ namespace Word_Search
              "....................",
             };
         }
-        static string[] GenerateBoard()
+        public static string[] GenerateBoard()
         {
             Random rand = new Random();
             string[] board = new string[20];
@@ -67,23 +68,27 @@ namespace Word_Search
             }
             return board;
         }
-        static string[] ReadCategories()
+        public static List<string> ReadCategories()
         {
             string filePath = "Words.txt";
             string[] allLines = File.ReadAllLines(filePath);
             List<string> categories = new List<string>();
             foreach (string line in allLines)
             {
-                if (!string.IsNullOrWhiteSpace(line))
+                if (!string.IsNullOrEmpty(line))
                 {
-                    categories.Add(line.Trim());
+                    string[] parts = line.Split(",");
+                    if (parts.Length > 0)
+                    {
+                        categories.Add(parts[0]);
+                    }
                 }
             }
             return categories;
         }
-        static string DisplayCategories()
+        public static string DisplayCategories()
         {
-            List<string> categories = ReadCategories();
+            List<string> categories = new List<string>(ReadCategories());
             Console.WriteLine("\n Available categories");
             foreach (string category in categories)
             {
@@ -102,7 +107,7 @@ namespace Word_Search
                 Console.WriteLine("\nInvalid input! Try again.");
             }
         }
-        static List<string> GetWordsFromCategory(string chosenCategory)
+        public static List<string> GetWordsFromCategory(string chosenCategory)
         {
             string filePath = "Words.txt";
             string[] allLines = File.ReadAllLines(filePath);
@@ -110,34 +115,23 @@ namespace Word_Search
             bool categoryFound = false;
             foreach (string line in allLines)
             {
-                if (string.IsNullOrEmpty(line))
+                string[] parts = line.Split(",");
+                if (parts.Length > 0 && parts[0] == chosenCategory)
                 {
-                 continue;
-                }
-                if (!categoryFound)
-                {
-                    if (line.Trim() == chosenCategory)
-                    {
-                     categoryFound = true;
-                        break;
-                    }
-                    else if(line.Trim() == chosenCategory)
-                    {
-                        categoryFound = true;
-                    }
+                    words.AddRange(parts.Skip(1));
                 }
             }
             return words;
         }
-        static List<string> SelectRandomWord(List<string> words)
+        public static List<string> SelectRandomWord(List<string> words)
         {
             Random rnd = new Random();
             List<string> selectedWords = new List<string>();
-            int wordCount = rnd.Next(8, Math.Min(15, words.Count));
-            while(selectedWords.Count < wordCount)
+            int wordCount = rnd.Next(Math.Min(8, words.Count));
+            while (selectedWords.Count < wordCount)
             {
                 string potentialWord = words[rnd.Next(words.Count)];
-                if(!selectedWords.Contains(potentialWord))
+                if (!selectedWords.Contains(potentialWord))
                 {
                     selectedWords.Add(potentialWord);
                 }
