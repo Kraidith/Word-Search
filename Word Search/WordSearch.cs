@@ -130,7 +130,7 @@ namespace Word_Search
                 if (!selectedWords.Contains(potentialWord))
                 {
                     selectedWords.Add(potentialWord);
-                }
+                } 
             }
             return selectedWords;
         }
