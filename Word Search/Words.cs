@@ -4,7 +4,7 @@ namespace Word_Search
 {
     internal class Words
     {
-      public static void GenerateWordsFile()
+        public static void GenerateWordsFile()
         {
             string linesFilePath = "Words.txt";
             StreamWriter writer = new StreamWriter(linesFilePath);
@@ -22,16 +22,16 @@ namespace Word_Search
             };
             for (int i = 0; i < categoriesAndWords.GetLength(0); i++)
             {
-                writer.Write(categoriesAndWords[i, 0]);
+                string line = categoriesAndWords[i, 0]; 
+
                 for (int j = 1; j < categoriesAndWords.GetLength(1); j++)
                 {
-                    writer.WriteLine(categoriesAndWords[i, j]);
+                    line += "," + categoriesAndWords[i, j]; 
                 }
-                writer.WriteLine("");
+                writer.WriteLine(line);
             }
             writer.Close();
             Console.WriteLine("Words.Txt has been created");
         }
     }
-
 }

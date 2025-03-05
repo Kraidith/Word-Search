@@ -75,14 +75,12 @@ namespace Word_Search
             List<string> categories = new List<string>();
             foreach (string line in allLines)
             {
-                if (!string.IsNullOrEmpty(line))
-                {
-                    string[] parts = line.Split(",");
+                string[] parts = line.Split(",");
                     if (parts.Length > 0)
                     {
                         categories.Add(parts[0]);
                     }
-                }
+              
             }
             return categories;
         }
