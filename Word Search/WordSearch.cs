@@ -56,7 +56,6 @@ namespace Word_Search
         {
             Random rand = new Random();
             string[] board = new string[20];
-
             for (int i = 0; i < 20; i++)
             {
                 string row = "";
@@ -80,7 +79,6 @@ namespace Word_Search
                     {
                         categories.Add(parts[0]);
                     }
-              
             }
             return categories;
         }
